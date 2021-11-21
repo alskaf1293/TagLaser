@@ -4,16 +4,28 @@ import math
 from parameters import *
 
 def detectBulletCollision(bullet, rect):
-    angle = math.atan(bullet.velocity.xPos/bullet.velocity.yPos)
+    velocity = bullet.get_direction()
+    angle = math.atan(velocity[0]/velocity[1])
     if rect.width > rect.height:
         angle = (-1) * angle
     else:
         angle = (math.pi/2) - angle
-    bullet.velocity.xPos = math.cos(angle)
-    bullet.velocity.yPos = math.sin(angle)
+    
+    bullet.setDirection((math.cos(angle),math.sin(angle)))
 
     #math.sin(radians)
-    #return 
+    #return
+
+def checkBulletCollisions(bullet, mazeWithRects):
+    
+    futurePos = np.array(bullet.get_direction())*maxBulletSpeed + bullet.get_center()
+    print(futurePos)
+    #willCollide = checkCollisions(player, walls)
+    willCollide = False
+    for x in mazeWithRects:
+        if circleWithRectangleCollision(x.left, x.top, x.width, x.height,futurePos[0], futurePos[1], bullet.get_radius()):
+            willCollide = True
+    return willCollide
 
 def checkCollisions(player, mazeWithRects):
     futurePos = player.get_facingVector()*maxSpeed + player.get_center()
@@ -122,6 +134,7 @@ def getWallsFromMaze(maze, width, height, probMirror):
     return final
 
 def randMirror(probMirror):
+    #1 is mirror, 2 is wall
     randNum = np.random.rand()
     if randNum <= probMirror:
         return 1

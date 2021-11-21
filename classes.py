@@ -34,8 +34,17 @@ class LaserBullet:
         self.yPos = yPos
         self.direction = direction
         self.cameFrom = cameFrom
+    def setDirection(self, val):
+        self.direction = val
     def updateValue(self, someAmount):
         self.xPos += someAmount[0]
         self.yPos += someAmount[1]
     def get_cameFrom(self):
         return self.cameFrom
+    def get_direction(self):
+        return self.direction
+    def get_center(self):
+        return np.array((self.xPos, self.yPos))
+    def get_radius(self):
+        return bulletRadius
+    

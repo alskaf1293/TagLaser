@@ -79,7 +79,12 @@ while running:
 
     #update bullets
     for x in bullets:
+        #willCollide = checkBulletCollisions(x, mazeWithRects)
+        #if not willCollide:
         x.updateValue(x.direction*maxBulletSpeed)
+        #else:
+        #    for y in mazeWithRects:
+        #        detectBulletCollision(x,y)
 
     ###### rendering
     # renders surface
