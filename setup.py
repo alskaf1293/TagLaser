@@ -5,6 +5,7 @@ from parameters import *
 
 #pygame setup
 pygame.init()
+pygame.font.init()
 surface = pygame.display.set_mode((windowX, windowY))
 background = pygame.Surface((windowX, windowY))
-background.fill(pygame.Color('#FFFFFF'))
+background.fill(pygame.Color(white))

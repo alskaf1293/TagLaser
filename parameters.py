@@ -1,5 +1,6 @@
 #colors
 black = (0,0,0)
+white = (255,255,255)
 red = (255, 127, 127)
 blue = (100, 100, 255)
 mirrorColor = (125, 249, 255)
@@ -10,7 +11,7 @@ wallwidth, wallheight = 4, 60
 probMirror=0.7
 
 #player parameters
-maxSpeed = 0.25
+maxSpeed = 0.5
 maxAngleChange = 0.5
 playerRadius = 8
 barrelLength = 16
@@ -26,6 +27,10 @@ windowX, windowY = 1200,800
 #scoring
 player1Score = 0
 player2Score = 0
+
+scoreFont = 'gabriola'
+scoreFontSize = 70
+scorePlacementBuffer = 20
 
 #key presses
 isA = False

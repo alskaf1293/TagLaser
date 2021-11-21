@@ -14,6 +14,13 @@ def detectBulletCollision(bullet, rect):
     elif rect.height > rect.width:
         bullet.setDirection(np.array((-math.cos(angle),math.sin(angle))))
 
+def checkCollisionBetweenCircles(center1, center2, radius1, radius2):
+    distance = math.sqrt((center2[0]-center1[0])**2+(center2[1]-center1[1])**2)
+    maxRadius = max(radius1, radius2)
+    if distance <= maxRadius:
+        return True
+    return False
+
 def updateBullet(bullet,wholeMaze,mazeWalls):
     futurePos = np.array(bullet.get_direction())*maxBulletSpeed + bullet.get_center()
     indexX = bullet.get_indexX()
