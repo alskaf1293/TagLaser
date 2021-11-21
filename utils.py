@@ -6,10 +6,13 @@ from parameters import *
 def detectBulletCollision(bullet, rect):
     velocity = bullet.get_direction()
     angle = math.atan(velocity[0]/velocity[1])
+
+    #if horizontal wall
     if rect.width > rect.height:
         angle = (-1) * angle
+    #if vertical wall
     else:
-        angle = (math.pi/2) - angle
+        angle = (math.pi/2) - (2*angle)
     
     bullet.setDirection((math.cos(angle),math.sin(angle)))
 
@@ -141,34 +144,45 @@ def randMirror(probMirror):
 
 def getRectWallsFromMaze(maze, width, height, wallwidth, wallheight, probMirror):
     maze = getWallsFromMaze(maze, width, height, probMirror)
-    grid = [[None] * width] * height
+    grid = []
     final = []
+    wholeMaze = []
     yPos = 0
     xPos = 0
     for y in range(len(maze)):
+        wholeMazeBuff = []
+        gridBuff = []
         currHeight = maze[y][0]
         for x in range(len(maze[0])):
-            
             current = maze[y][x]
             if current == 0:
                 if x % 2 == 0:
+                    wholeMazeBuff.append(pygame.Rect((xPos, yPos), (wallwidth, wallheight)))
                     xPos += wallwidth
                 else:
                     if x % 2 == 1 and y % 2 == 1:
-                        grid[int((x-1)/2)][int((y-1)/2)] = pygame.Rect((xPos,yPos), (wallheight, wallheight))
+                        rect = pygame.Rect((xPos, yPos), (wallheight, wallheight))
+                        wholeMazeBuff.append(rect)
+                        gridBuff.append(rect)
+                    else:
+                        wholeMazeBuff.append(pygame.Rect((xPos, yPos), (wallheight, wallwidth)))
                     xPos += wallheight
 
             elif current == 1 or current == 2:
                 if currHeight == 3:
+                    
                     rect = pygame.Rect((xPos,yPos),(wallheight, wallwidth))
+                    wholeMazeBuff.append(rect)
                     final.append(rect)
                     xPos += wallheight
                 elif currHeight == 1 or currHeight == 2:
                     rect = pygame.Rect((xPos,yPos),(wallwidth, wallheight))
+                    wholeMazeBuff.append(rect)
                     final.append(rect)
                     xPos += wallwidth
             else:
                 rect = pygame.Rect((xPos,yPos),(wallwidth, wallwidth))
+                wholeMazeBuff.append(rect)
                 final.append(rect)
                 xPos += wallwidth
         
@@ -178,8 +192,14 @@ def getRectWallsFromMaze(maze, width, height, wallwidth, wallheight, probMirror)
             yPos += wallheight
         if y != len(maze) -1:
             xPos = 0
+        wholeMaze.append(wholeMazeBuff)
+        if len(gridBuff) != 0:
+            grid.append(gridBuff)
+        wholeMazeBuff = []
+        gridBuff = []
+    
     xPos += wallwidth
-    return final, grid, (xPos, yPos)
+    return wholeMaze, final, grid, (xPos, yPos)
 
 def getUnitCirclePointFromAngle(theta):
     thetaRadians = math.radians(theta)

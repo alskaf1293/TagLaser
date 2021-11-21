@@ -7,8 +7,22 @@ from parameters import *
 
 #generate maze
 maze = generateMaze(width,height)
-mazeWithRects, mazeGrid, mazeDim = getRectWallsFromMaze(maze, width, height, wallwidth, wallheight, probMirror)
+temp, mazeWithRects, temp2, mazeDim = getRectWallsFromMaze(maze, width, height, wallwidth, wallheight, probMirror)
 mazeWithRects = [x.move(windowX/2-mazeDim[0]/2, windowY/2-mazeDim[1]/2) for x in mazeWithRects]
+
+wholeMaze = []
+for x in temp:
+    thing = []
+    for y in x:
+        thing.append(y.move(windowX/2-mazeDim[0]/2, windowY/2-mazeDim[1]/2))
+    wholeMaze.append(thing)
+
+mazeGrid = []
+for x in temp2:
+    thing = []
+    for y in x:
+        thing.append(y.move(windowX/2-mazeDim[0]/2, windowY/2-mazeDim[1]/2))
+    mazeGrid.append(thing)
 
 #generate players
 rectIndex1X, rectIndex1Y = np.random.randint((len(mazeGrid), len(mazeGrid[0]))); 
@@ -20,6 +34,7 @@ player2 = Player(mazeGrid[rectIndex2X][rectIndex2Y], mazeDim)
 
 #bullets
 bullets = []
+
 
 running = True
 while running:

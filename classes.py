@@ -6,8 +6,8 @@ import numpy as np
 class Player:
     def __init__(self, rect, mazeDim):
         self.radius = playerRadius
-        self.xPos = rect.centerx + windowX/2-mazeDim[0]/2
-        self.yPos = rect.centery + windowY/2-mazeDim[1]/2
+        self.xPos = rect.centerx
+        self.yPos = rect.centery
         self.angleFacing = np.random.randint(359)
         self.facingVector = getUnitCirclePointFromAngle(self.angleFacing)
     def updatePos(self, someAmount):
