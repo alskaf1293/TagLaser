@@ -20,3 +20,8 @@ Finally, to run the game, simply run ```main.py```
 ```
 python main.py
 ```
+
+Created by AP Stack Overflow
+Timothy Oh
+Phillip Suh
+Aaryan Gupta
