@@ -117,14 +117,14 @@ while running:
             if collided:
                 player2Score += 1
                 time.sleep(2)
-                player1, player2, bullets, mazeGrid, wholeMaze, maze, mazeWithRects, mazeWalls, mazeDim = generate()
+                player1, player2, bullets, mazeGrid, wholeMaze, maze, mazeWithRects, mazeWalls, mazeDim, clock = generate()
                 
         if x.get_cameFrom() == player1:
             collided = checkCollisionBetweenCircles(x.get_center(), player2.get_center(), x.get_radius(), player2.get_radius())
             if collided:
                 player1Score += 1
                 time.sleep(2)
-                player1, player2, bullets, mazeGrid, wholeMaze, maze, mazeWithRects, mazeWalls, mazeDim = generate()
+                player1, player2, bullets, mazeGrid, wholeMaze, maze, mazeWithRects, mazeWalls, mazeDim, clock = generate()
                 
     #print(player1Score)
     #print(player2Score)

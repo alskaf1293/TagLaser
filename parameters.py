@@ -7,7 +7,7 @@ mirrorColor = (125, 249, 255)
 
 #maze parameters
 width, height = 12, 12
-wallwidth, wallheight = 4, 60
+wallwidth, wallheight = 5, 60
 probMirror=0.7
 
 #player parameters
@@ -21,7 +21,7 @@ barrelWidth = 4
 shootingCooldown = 1
 bulletsPerStream = 30
 maxBulletSpeed = 3.5
-bulletRadius = 10
+bulletRadius = 2
 maxSwitches = 20
 
 #pygame and windows
