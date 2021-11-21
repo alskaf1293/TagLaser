@@ -9,13 +9,10 @@ def detectBulletCollision(bullet, rect):
 
     #if horizontal wall
     if rect.width > rect.height:
-        bullet.setDirection((math.cos(angle),-math.sin(angle)))
+        bullet.setDirection(np.array((math.cos(angle),-math.sin(angle))))
     #if vertical wall
     elif rect.height > rect.width:
-        bullet.setDirection((-math.cos(angle),math.sin(angle)))
-
-    #math.sin(radians)
-    #return
+        bullet.setDirection(np.array((-math.cos(angle),math.sin(angle))))
 
 def updateBullet(bullet,wholeMaze,mazeWalls):
     """

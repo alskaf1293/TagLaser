@@ -99,7 +99,8 @@ while running:
     for x in bullets:
         willCollide, collideWall = checkBulletCollisions(x, wholeMaze, mazeWalls)
         if not willCollide:
-            x.updateValue(x.direction*maxBulletSpeed)
+            
+            x.updateValue(x.get_direction()*maxBulletSpeed)
         else:
             detectBulletCollision(x,collideWall)
         updateBullet(x, wholeMaze, mazeWalls)

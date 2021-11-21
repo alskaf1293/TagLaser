@@ -17,7 +17,7 @@ barrelLength = 16
 barrelWidth = 4
 
 #bullet parameters
-maxBulletSpeed = 1
+maxBulletSpeed = 0.5
 bulletRadius = 10
 
 #pygame and windows

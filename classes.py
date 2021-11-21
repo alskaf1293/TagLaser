@@ -55,6 +55,7 @@ class LaserBullet:
         self.indexY = pos[1]
     def setDirection(self, val):
         self.direction = val
+
     def updateValue(self, someAmount):
         self.xPos += someAmount[0]
         self.yPos += someAmount[1]
