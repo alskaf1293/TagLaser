@@ -15,21 +15,6 @@ def detectBulletCollision(bullet, rect):
         bullet.setDirection(np.array((-math.cos(angle),math.sin(angle))))
 
 def updateBullet(bullet,wholeMaze,mazeWalls):
-    """
-    futurePos = player.get_facingVector()*maxSpeed + player.get_center()
-    indexX = player.get_indexX()
-    indexY = player.get_indexY()
-    besideVectors = np.array([[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1],[1,0]])
-    surrounding = []
-    for x in besideVectors:
-        surroundElem = mazeWalls[indexY + x[1]][indexX + x[0]]
-        if surroundElem == 0:
-            surrounding.append((wholeMaze[indexY + x[1]][indexX + x[0]], x))
-    for x in surrounding:
-        if circleWithRectangleCollision(x[0].left, x[0].top, x[0].width, x[0].height,futurePos[0], futurePos[1], player.get_radius()):
-            player.updateRectangle(x[0], x[1]+np.array([indexX,indexY]))
-            break
-    """
     futurePos = np.array(bullet.get_direction())*maxBulletSpeed + bullet.get_center()
     indexX = bullet.get_indexX()
     indexY = bullet.get_indexY()
@@ -47,6 +32,7 @@ def updateBullet(bullet,wholeMaze,mazeWalls):
 def checkBulletCollisions(bullet, wholeMaze, mazeWalls):
     futurePos = np.array(bullet.get_direction())*maxBulletSpeed + bullet.get_center()
     collision = None
+    returnIndex = None
     indexX = bullet.get_indexX()
     indexY = bullet.get_indexY()
 
@@ -56,13 +42,15 @@ def checkBulletCollisions(bullet, wholeMaze, mazeWalls):
     for x in besideVectors:
         surroundElem = mazeWalls[indexY + x[1]][indexX + x[0]]
         if surroundElem != 0:
-            surrounding.append(wholeMaze[indexY + x[1]][indexX + x[0]])
+            surrounding.append((wholeMaze[indexY + x[1]][indexX + x[0]],(indexY + x[1],indexX + x[0])))
     willCollide = False
     for x in surrounding:
-        if circleWithRectangleCollision(x.left, x.top, x.width, x.height,futurePos[0], futurePos[1], bullet.get_radius()):
+        if circleWithRectangleCollision(x[0].left, x[0].top, x[0].width, x[0].height,futurePos[0], futurePos[1], bullet.get_radius()):
             willCollide = True
-            collision = x
-    return willCollide, collision
+            collision = x[0]
+            returnIndex = x[1]
+            break
+    return willCollide, collision, returnIndex
 
 def updatePlayerBox(player, wholeMaze, mazeWalls):
     futurePos = player.get_facingVector()*maxSpeed + player.get_center()
@@ -186,9 +174,9 @@ def getWallsFromMaze(maze, width, height, probMirror):
             current = y*width + x
             lower = ((y+1)* width) + x
             if not (current, lower) in maze:
-                final[pos[0],pos[1]+1] = 1
+                final[pos[0],pos[1]+1] = randMirror(probMirror)
             if not (current, current + 1) in maze:
-                final[pos[0]+1,pos[1]] = 1
+                final[pos[0]+1,pos[1]] = randMirror(probMirror)
             final[pos[0]+1, pos[1]+1] = 3
     return final
 

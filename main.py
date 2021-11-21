@@ -10,6 +10,8 @@ maze = generateMaze(width,height)
 temp, mazeWithRects, temp2, mazeWalls, mazeDim = getRectWallsFromMaze(maze, width, height, wallwidth, wallheight, probMirror)
 mazeWithRects = [x.move(windowX/2-mazeDim[0]/2, windowY/2-mazeDim[1]/2) for x in mazeWithRects]
 
+#mazeWithRects is every rectangle you can collide with
+#every rect object in the maze
 wholeMaze = []
 for x in temp:
     thing = []
@@ -34,7 +36,6 @@ player2 = Player(mazeGrid[rectIndex2X][rectIndex2Y], 2*rectIndex2Y+1, 2*rectInde
 
 #bullets
 bullets = []
-
 
 running = True
 while running:
@@ -97,12 +98,14 @@ while running:
 
     #update bullets
     for x in bullets:
-        willCollide, collideWall = checkBulletCollisions(x, wholeMaze, mazeWalls)
+        willCollide, collideWall, wallIndex = checkBulletCollisions(x, wholeMaze, mazeWalls)
         if not willCollide:
-            
             x.updateValue(x.get_direction()*maxBulletSpeed)
         else:
-            detectBulletCollision(x,collideWall)
+            if mazeWalls[wallIndex[0]][wallIndex[1]] in [2,3]:
+                bullets.remove(x)
+            else:
+                detectBulletCollision(x,collideWall)
         updateBullet(x, wholeMaze, mazeWalls)
 
     ###### rendering
@@ -117,8 +120,14 @@ while running:
             pygame.draw.circle(surface, blue, (x.xPos, x.yPos), bulletRadius)
 
     # renders walls
-    for x in mazeWithRects:
-        pygame.draw.rect(surface, black, x)
+    for x in range(len(wholeMaze)):
+        for y in range(len(wholeMaze[0])):
+            if mazeWalls[x][y] == 1:
+                pygame.draw.rect(surface, mirrorColor, wholeMaze[x][y])
+            elif mazeWalls[x][y] == 3 or mazeWalls[x][y] == 2:
+                pygame.draw.rect(surface, black, wholeMaze[x][y])
+    #for x in mazeWithRects:
+    #    pygame.draw.rect(surface, black, x)
 
     #renders players
     pygame.draw.circle(surface, red, player1.get_center(), player1.get_radius())

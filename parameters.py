@@ -7,7 +7,7 @@ mirrorColor = (125, 249, 255)
 #maze parameters
 width, height = 12, 12
 wallwidth, wallheight = 4, 60
-probMirror=0.8
+probMirror=0.7
 
 #player parameters
 maxSpeed = 0.25
@@ -22,6 +22,10 @@ bulletRadius = 10
 
 #pygame and windows
 windowX, windowY = 1200,800
+
+#scoring
+player1Score = 0
+player2Score = 0
 
 #key presses
 isA = False
