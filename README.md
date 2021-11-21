@@ -1,5 +1,6 @@
 # TagLaser
 
+## Installation
 This was a project made under the overall track for LEC Hacks November 2021.
 
 To clone this repository, type
@@ -21,7 +22,7 @@ Finally, to run the game, simply run ```main.py```
 python main.py
 ```
 
-Created by AP Stack Overflow  
+## Created by AP Stack Overflow:
 Timothy Oh  
 Phillip Suh  
 Aaryan Gupta  
