@@ -7,7 +7,7 @@ from parameters import *
 
 #generate maze
 maze = generateMaze(width,height)
-temp, mazeWithRects, temp2, mazeDim = getRectWallsFromMaze(maze, width, height, wallwidth, wallheight, probMirror)
+temp, mazeWithRects, temp2, mazeWalls, mazeDim = getRectWallsFromMaze(maze, width, height, wallwidth, wallheight, probMirror)
 mazeWithRects = [x.move(windowX/2-mazeDim[0]/2, windowY/2-mazeDim[1]/2) for x in mazeWithRects]
 
 wholeMaze = []
@@ -28,9 +28,9 @@ for x in temp2:
 rectIndex1X, rectIndex1Y = np.random.randint((len(mazeGrid), len(mazeGrid[0]))); 
 rectIndex2X, rectIndex2Y = np.random.randint((len(mazeGrid), len(mazeGrid[0]))); 
 while [rectIndex1X, rectIndex1Y] == [rectIndex2X, rectIndex2Y]: 
-    rectIndex2X, rectIndex2Y = np.random.randint((len(mazeGrid), len(mazeGrid[0]))); 
-player1 = Player(mazeGrid[rectIndex1X][rectIndex1Y], mazeDim)
-player2 = Player(mazeGrid[rectIndex2X][rectIndex2Y], mazeDim)
+    rectIndex2X, rectIndex2Y = np.random.randint((len(mazeGrid), len(mazeGrid[0])))
+player1 = Player(mazeGrid[rectIndex1X][rectIndex1Y], 2*rectIndex1Y+1, 2*rectIndex1X+1)
+player2 = Player(mazeGrid[rectIndex2X][rectIndex2Y], 2*rectIndex2Y+1, 2*rectIndex2X+1)
 
 #bullets
 bullets = []
@@ -86,20 +86,23 @@ while running:
     if isArrowRight:player2.updateAngle(maxAngleChange)
     
     if isW:
-        willCollide = checkCollisions(player1, mazeWithRects)
+        willCollide = checkCollisions(player1, wholeMaze, mazeWalls)
         if not willCollide: player1.updatePos(player1.get_facingVector()*maxSpeed)
+    updatePlayerBox(player1, wholeMaze, mazeWalls)
+
     if isArrowUp:
-        willCollide = checkCollisions(player2, mazeWithRects)
+        willCollide = checkCollisions(player2, wholeMaze, mazeWalls)
         if not willCollide: player2.updatePos(player2.get_facingVector()*maxSpeed)
+    updatePlayerBox(player2, wholeMaze, mazeWalls)
 
     #update bullets
     for x in bullets:
-        willCollide = checkBulletCollisions(x, mazeWithRects)
+        willCollide, collideWall = checkBulletCollisions(x, wholeMaze, mazeWalls)
         if not willCollide:
             x.updateValue(x.direction*maxBulletSpeed)
         else:
-            for y in mazeWithRects:
-                detectBulletCollision(x,y)
+            detectBulletCollision(x,collideWall)
+        updateBullet(x, wholeMaze, mazeWalls)
 
     ###### rendering
     # renders surface

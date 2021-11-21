@@ -5,34 +5,95 @@ from parameters import *
 
 def detectBulletCollision(bullet, rect):
     velocity = bullet.get_direction()
-    angle = math.atan(velocity[0]/velocity[1])
+    angle = math.atan(velocity[1]/velocity[0])
 
     #if horizontal wall
     if rect.width > rect.height:
-        angle = (-1) * angle
+        bullet.setDirection((math.cos(angle),-math.sin(angle)))
     #if vertical wall
-    else:
-        angle = (math.pi/2) - (2*angle)
-    
-    bullet.setDirection((math.cos(angle),math.sin(angle)))
+    elif rect.height > rect.width:
+        bullet.setDirection((-math.cos(angle),math.sin(angle)))
 
     #math.sin(radians)
     #return
 
-def checkBulletCollisions(bullet, mazeWithRects):
-    
+def updateBullet(bullet,wholeMaze,mazeWalls):
+    """
+    futurePos = player.get_facingVector()*maxSpeed + player.get_center()
+    indexX = player.get_indexX()
+    indexY = player.get_indexY()
+    besideVectors = np.array([[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1],[1,0]])
+    surrounding = []
+    for x in besideVectors:
+        surroundElem = mazeWalls[indexY + x[1]][indexX + x[0]]
+        if surroundElem == 0:
+            surrounding.append((wholeMaze[indexY + x[1]][indexX + x[0]], x))
+    for x in surrounding:
+        if circleWithRectangleCollision(x[0].left, x[0].top, x[0].width, x[0].height,futurePos[0], futurePos[1], player.get_radius()):
+            player.updateRectangle(x[0], x[1]+np.array([indexX,indexY]))
+            break
+    """
     futurePos = np.array(bullet.get_direction())*maxBulletSpeed + bullet.get_center()
+    indexX = bullet.get_indexX()
+    indexY = bullet.get_indexY()
+
+    besideVectors = np.array([[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1],[1,0]])
+    surrounding = []
+
+    for x in besideVectors:
+        surroundElem = mazeWalls[indexY + x[1]][indexX + x[0]]
+        if surroundElem == 0:
+            surrounding.append((wholeMaze[indexY + x[1]][indexX + x[0]],x))
+    for x in surrounding:
+        if circleWithRectangleCollision(x[0].left, x[0].top, x[0].width, x[0].height,futurePos[0], futurePos[1], bullet.get_radius()):
+            bullet.updateRectangle(x[0], x[1]+np.array([indexX,indexY]))
+def checkBulletCollisions(bullet, wholeMaze, mazeWalls):
+    futurePos = np.array(bullet.get_direction())*maxBulletSpeed + bullet.get_center()
+    collision = None
+    indexX = bullet.get_indexX()
+    indexY = bullet.get_indexY()
+
+    besideVectors = np.array([[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1],[1,0]])
+    surrounding = []
+
+    for x in besideVectors:
+        surroundElem = mazeWalls[indexY + x[1]][indexX + x[0]]
+        if surroundElem != 0:
+            surrounding.append(wholeMaze[indexY + x[1]][indexX + x[0]])
     willCollide = False
-    for x in mazeWithRects:
+    for x in surrounding:
         if circleWithRectangleCollision(x.left, x.top, x.width, x.height,futurePos[0], futurePos[1], bullet.get_radius()):
             willCollide = True
-    return willCollide
+            collision = x
+    return willCollide, collision
 
-def checkCollisions(player, mazeWithRects):
+def updatePlayerBox(player, wholeMaze, mazeWalls):
     futurePos = player.get_facingVector()*maxSpeed + player.get_center()
-    #willCollide = checkCollisions(player, walls)
+    indexX = player.get_indexX()
+    indexY = player.get_indexY()
+    besideVectors = np.array([[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1],[1,0]])
+    surrounding = []
+    for x in besideVectors:
+        surroundElem = mazeWalls[indexY + x[1]][indexX + x[0]]
+        if surroundElem == 0:
+            surrounding.append((wholeMaze[indexY + x[1]][indexX + x[0]], x))
+    for x in surrounding:
+        if circleWithRectangleCollision(x[0].left, x[0].top, x[0].width, x[0].height,futurePos[0], futurePos[1], player.get_radius()):
+            player.updateRectangle(x[0], x[1]+np.array([indexX,indexY]))
+            break
+
+def checkCollisions(player, wholeMaze, mazeWalls):
+    futurePos = player.get_facingVector()*maxSpeed + player.get_center()
+    indexX = player.get_indexX()
+    indexY = player.get_indexY()
+    besideVectors = np.array([[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1],[1,0]])
+    surrounding = []
+    for x in besideVectors:
+        surroundElem = mazeWalls[indexY + x[1]][indexX + x[0]]
+        if surroundElem != 0:
+            surrounding.append(wholeMaze[indexY + x[1]][indexX + x[0]])
     willCollide = False
-    for x in mazeWithRects:
+    for x in surrounding:
         if circleWithRectangleCollision(x.left, x.top, x.width, x.height,futurePos[0], futurePos[1], player.get_radius()):
             willCollide = True
     return willCollide
@@ -199,7 +260,7 @@ def getRectWallsFromMaze(maze, width, height, wallwidth, wallheight, probMirror)
         gridBuff = []
     
     xPos += wallwidth
-    return wholeMaze, final, grid, (xPos, yPos)
+    return wholeMaze, final, grid, maze, (xPos, yPos)
 
 def getUnitCirclePointFromAngle(theta):
     thetaRadians = math.radians(theta)
