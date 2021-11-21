@@ -19,8 +19,6 @@ def detectBulletCollision(bullet, rect):
 def checkBulletCollisions(bullet, mazeWithRects):
     
     futurePos = np.array(bullet.get_direction())*maxBulletSpeed + bullet.get_center()
-    print(futurePos)
-    #willCollide = checkCollisions(player, walls)
     willCollide = False
     for x in mazeWithRects:
         if circleWithRectangleCollision(x.left, x.top, x.width, x.height,futurePos[0], futurePos[1], bullet.get_radius()):
