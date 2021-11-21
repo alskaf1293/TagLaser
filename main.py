@@ -121,6 +121,9 @@ while running:
     #print(player2Score)
     #update bullets
     for x in bullets:
+        if x.get_switches() == maxSwitches:
+            bullets.remove(x)
+
         willCollide, collideWall, wallIndex = checkBulletCollisions(x, wholeMaze, mazeWalls)
         if not willCollide:
             x.updateValue(x.get_direction()*maxBulletSpeed)
@@ -129,6 +132,7 @@ while running:
                 bullets.remove(x)
             else:
                 detectBulletCollision(x,collideWall)
+            x.incrementSwitches()
         updateBullet(x, wholeMaze, mazeWalls)
 
     ###### rendering

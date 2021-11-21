@@ -49,6 +49,7 @@ class LaserBullet:
         self.yPos = yPos
         self.direction = direction
         self.cameFrom = cameFrom
+        self.switches = 0
     def updateRectangle(self, rect, pos):
         self.currentRect = rect
         self.indexX = pos[0]
@@ -75,4 +76,7 @@ class LaserBullet:
         return self.indexX
     def get_indexY(self):
         return self.indexY
-    
+    def get_switches(self):
+        return self.switches
+    def incrementSwitches(self):
+        self.switches += 1

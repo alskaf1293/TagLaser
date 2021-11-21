@@ -5,14 +5,15 @@ from parameters import *
 
 def detectBulletCollision(bullet, rect):
     velocity = bullet.get_direction()
-    angle = math.atan(velocity[1]/velocity[0])
+    #angle = math.atan(velocity[1]/velocity[0])
 
     #if horizontal wall
     if rect.width > rect.height:
-        bullet.setDirection(np.array((math.cos(angle),-math.sin(angle))))
+        bullet.setDirection(np.array((velocity[0],-1*velocity[1])))
+        
     #if vertical wall
     elif rect.height > rect.width:
-        bullet.setDirection(np.array((-math.cos(angle),math.sin(angle))))
+        bullet.setDirection(np.array((-1*velocity[0],velocity[1])))
 
 def checkCollisionBetweenCircles(center1, center2, radius1, radius2):
     distance = math.sqrt((center2[0]-center1[0])**2+(center2[1]-center1[1])**2)

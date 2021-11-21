@@ -12,14 +12,16 @@ probMirror=0.7
 
 #player parameters
 maxSpeed = 0.5
-maxAngleChange = 0.5
+maxAngleChange = 1
 playerRadius = 8
 barrelLength = 16
 barrelWidth = 4
 
 #bullet parameters
+bulletsPerStream = 15
 maxBulletSpeed = 0.5
 bulletRadius = 10
+maxSwitches = 20
 
 #pygame and windows
 windowX, windowY = 1200,800
