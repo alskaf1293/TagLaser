@@ -11,15 +11,16 @@ wallwidth, wallheight = 4, 60
 probMirror=0.7
 
 #player parameters
-maxSpeed = 0.5
-maxAngleChange = 1
+maxSpeed = 1
+maxAngleChange = 2
 playerRadius = 8
 barrelLength = 16
 barrelWidth = 4
 
 #bullet parameters
-bulletsPerStream = 15
-maxBulletSpeed = 0.5
+shootingCooldown = 1
+bulletsPerStream = 30
+maxBulletSpeed = 3.5
 bulletRadius = 10
 maxSwitches = 20
 

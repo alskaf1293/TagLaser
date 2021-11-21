@@ -13,6 +13,8 @@ class Player:
         self.yPos = rect.centery
         self.angleFacing = np.random.randint(359)
         self.facingVector = getUnitCirclePointFromAngle(self.angleFacing)
+        self.shootingCooldown = 0
+        self.streams = 0
     def updateRectangle(self,rect, pos):
         self.currentRect = rect
         self.indexX = pos[0]
@@ -37,6 +39,21 @@ class Player:
         return self.indexX
     def get_indexY(self):
         return self.indexY
+    def get_streams(self):
+        return self.streams
+    def get_shootingCooldown(self):
+        return self.shootingCooldown
+    def setStreams(self, val):
+        self.streams = val
+    def setShootingCooldown(self, val):
+        self.shootingCooldown = val
+    def decrementShootingCooldown(self, seconds):
+        if not self.shootingCooldown == 0:
+            self.shootingCooldown -= seconds
+            if self.shootingCooldown < 0:
+                self.shootingCooldown = 0
+    def decrementStream(self):
+        self.streams -= 1
 
 
 class LaserBullet:

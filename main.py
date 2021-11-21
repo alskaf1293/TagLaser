@@ -38,12 +38,15 @@ def generate():
 
     #bullets
     bullets = []
-    return player1, player2, bullets, mazeGrid, wholeMaze, maze, mazeWithRects, mazeWalls, mazeDim
 
-player1, player2, bullets, mazeGrid, wholeMaze, maze, mazeWithRects, mazeWalls, mazeDim = generate()
+    clock = pygame.time.Clock()
+    return player1, player2, bullets, mazeGrid, wholeMaze, maze, mazeWithRects, mazeWalls, mazeDim, clock
+
+player1, player2, bullets, mazeGrid, wholeMaze, maze, mazeWithRects, mazeWalls, mazeDim, clock = generate()
 
 running = True
 while running:
+    clock.tick(120)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -55,8 +58,11 @@ while running:
 
             #shoot bullet player 1
             if event.key == pygame.K_BACKQUOTE:
-                bullet = LaserBullet(player1.get_center()[0], player1.get_center()[1], player1.get_facingVector(), player1)
-                bullets.append(bullet)
+                if player1.get_shootingCooldown() == 0:
+                    bullet = LaserBullet(player1.get_center()[0], player1.get_center()[1], player1.get_facingVector(), player1)
+                    bullets.append(bullet)
+                    player1.setShootingCooldown(shootingCooldown)
+                    player1.setStreams(bulletsPerStream-1)
             ##
             if event.key == pygame.K_LEFT: isArrowLeft = True
             if event.key == pygame.K_RIGHT: isArrowRight = True
@@ -64,8 +70,11 @@ while running:
             if event.key == pygame.K_DOWN: player2.updateAngle(180)
             #shoot bullet player 2
             if event.key == pygame.K_SLASH:
-                bullet = LaserBullet(player2.get_center()[0], player2.get_center()[1], player2.get_facingVector(), player2)
-                bullets.append(bullet)
+                if player2.get_shootingCooldown() == 0:
+                    bullet = LaserBullet(player2.get_center()[0], player2.get_center()[1], player2.get_facingVector(), player2)
+                    bullets.append(bullet)
+                    player2.setShootingCooldown(shootingCooldown)
+                    player2.setStreams(bulletsPerStream-1)
         
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_a:
@@ -135,6 +144,16 @@ while running:
             x.incrementSwitches()
         updateBullet(x, wholeMaze, mazeWalls)
 
+    #set Streams
+    if player1.get_streams() > 0:
+        bullet = LaserBullet(player1.get_center()[0], player1.get_center()[1], player1.get_facingVector(), player1)
+        bullets.append(bullet)
+        player1.decrementStream()
+    if player2.get_streams() > 0:
+        bullet = LaserBullet(player2.get_center()[0], player2.get_center()[1], player2.get_facingVector(), player2)
+        bullets.append(bullet)
+        player2.decrementStream()
+
     ###### rendering
     # renders surface
     surface.blit(background, (0, 0))
@@ -171,3 +190,6 @@ while running:
     surface.blit(player1Surface,(scorePlacementBuffer,scorePlacementBuffer))
     surface.blit(player2Surface,(windowX-player2Surface.get_size()[0]-scorePlacementBuffer,scorePlacementBuffer))
     pygame.display.update()
+
+    player1.decrementShootingCooldown(clock.get_time()/1000)
+    player2.decrementShootingCooldown(clock.get_time()/1000)
