@@ -1,13 +1,35 @@
 import numpy as np
 import pygame
 import math
+from parameters import *
+
+def detectBulletCollision(bullet, rect):
+    angle = math.atan(bullet.velocity.xPos/bullet.velocity.yPos)
+    if rect.width > rect.height:
+        angle = (-1) * angle
+    else:
+        angle = (math.pi/2) - angle
+    bullet.velocity.xPos = math.cos(angle)
+    bullet.velocity.yPos = math.sin(angle)
+
+    #math.sin(radians)
+    #return 
+
+def checkCollisions(player, mazeWithRects):
+    futurePos = player.get_facingVector()*maxSpeed + player.get_center()
+    #willCollide = checkCollisions(player, walls)
+    willCollide = False
+    for x in mazeWithRects:
+        if circleWithRectangleCollision(x.left, x.top, x.width, x.height,futurePos[0], futurePos[1], player.get_radius()):
+            willCollide = True
+    return willCollide
 
 def circleWithRectangleCollision(rleft, rtop, width, height,   # rectangle definition
               center_x, center_y, radius):  # circle definition
     """ Detect collision between a rectangle and circle. """
 
     # complete boundbox of the rectangle
-    rright, rbottom = rleft + width/2, rtop + height/2
+    rright, rbottom = rleft + width, rtop + height
 
     # bounding box of the circle
     cleft, ctop     = center_x-radius, center_y-radius
@@ -147,3 +169,7 @@ def getRectWallsFromMaze(maze, width, height, wallwidth, wallheight, probMirror)
             xPos = 0
     xPos += wallwidth
     return final, grid, (xPos, yPos)
+
+def getUnitCirclePointFromAngle(theta):
+    thetaRadians = math.radians(theta)
+    return np.array((math.cos(thetaRadians), math.sin(thetaRadians)))
